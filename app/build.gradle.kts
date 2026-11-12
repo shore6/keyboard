@@ -11,8 +11,8 @@ android {
         applicationId = "io.github.shore6.keyboard"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
     }
 
     // リリース署名は環境変数で指定する (GitHub Actions では Secrets から渡す)。

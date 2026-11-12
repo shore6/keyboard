@@ -3,10 +3,12 @@ package io.github.shore6.keyboard
 import android.content.Context
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
+import android.os.Build
 import android.text.InputType
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowInsets
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -68,6 +70,19 @@ class KeyboardIME : InputMethodService(), KeyboardView.Listener {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
+            setBackgroundColor(0xFF111417.toInt())
+            // Android 15 以降 (targetSdk 35) は IME ウィンドウもナビゲーションバーの下まで広がるので、
+            // その分だけ下に余白を入れてキーが戻る・ホームボタンと重ならないようにする
+            setOnApplyWindowInsetsListener { v, insets ->
+                val bottom = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    insets.getInsets(WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout()).bottom
+                } else {
+                    @Suppress("DEPRECATION")
+                    insets.systemWindowInsetBottom
+                }
+                v.setPadding(0, 0, 0, bottom)
+                insets
+            }
             addView(candidateBar, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (44 * density).toInt()))
             addView(keyboardView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         }
