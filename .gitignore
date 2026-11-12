@@ -1,0 +1,10 @@
+.gradle/
+build/
+.dict-cache/
+local.properties
+*.iml
+.idea/
+.kotlin/
+*.jks
+*.keystore
+s6-keyboard.apk
